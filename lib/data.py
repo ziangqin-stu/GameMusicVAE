@@ -263,6 +263,8 @@ class DataPreparation(object):
         file_name_list = os.listdir(dataset_path)
         midi_count = 0
         print("\nsaving midi object to .mid files...")
+        if not os.path.exists(dataset_path):
+            os.makedirs(dataset_path)
         for file_name in file_name_list:
             # restore dataset
             if file_name.startswith(dataset_name):
