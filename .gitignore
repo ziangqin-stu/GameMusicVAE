@@ -3,4 +3,6 @@
 *.zip
 *.rar
 *.txt
+*.tar
 source/data*
+source/model
