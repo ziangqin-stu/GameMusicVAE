@@ -1,0 +1,11 @@
+# generate note-sequence
+convert_dir_to_note_sequences --input_dir=.\midi --output_file=./note_sequence/notesequences.tfrecord --recursive
+
+# trian vae
+music_vae_train --config=game_1 --run_dir=./model --mode=train -examples_path=./note_sequence/notesequences.tfrecord
+
+# sample
+music_vae_generate --config=game_1 --checkpoint_file=./model/train/model.ckpt-0 --mode=sample --num_outputs=5 --output_dir=./sample
+
+# sample pretrained
+music_vae_generate --config=hierdec-trio_16bar --checkpoint_file=./pretrained/model/hierdec-trio_16bar.tar --mode=sample --num_outputs=5 --output_dir=./pretrained/sample

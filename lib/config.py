@@ -1,0 +1,19 @@
+"""
+Project common configuration of GameMusicVAE
+"""
+
+DATA_POOL_PATH = "./source/data"
+DATABASE_PATH = "./source/database"
+TRIO_DATASET_NAME = "trio_dataset"
+DATASET_NAME = "dataset"
+TRIO_MIDI_DATASET_PATH = "./source/trio_midi"
+
+DATASET_PART_LENGTH = 2000
+LOADING_BATCH_SIZE = 6000
+
+TRIO_MIDI_BAR_NUMBER = 8
+MIN_MELODY_NOTES_IN_SEGMENT = 1
+MIN_BASS_NOTES_IN_SEGMENT = 1
+MIN_DRUM_NOTES_IN_SEGMENT = 1
+MIN_NOTES_IN_SEGMENT = 3
+SILENCE_STRIDE = 1

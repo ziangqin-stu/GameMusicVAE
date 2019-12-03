@@ -1,0 +1,6 @@
+*.mid
+*.tfrecord
+*.zip
+*.rar
+*.txt
+source/data*
