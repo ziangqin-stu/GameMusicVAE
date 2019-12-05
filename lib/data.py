@@ -160,7 +160,7 @@ class DataPreparation(object):
         return trio_dataset
 
     @classmethod
-    def window_split_trio(cls, midi, trio_struct):
+    def window_split_trio(cls, midi, trio_struct, segment_length=TRIO_MIDI_BAR_NUMBER):
         """
         split the midi layers specified by trio_struct with a TRIO_MIDI_BAR_NUMBER long window
         return a list of window sized midi files that screened by notes' number
@@ -180,7 +180,7 @@ class DataPreparation(object):
         tempo_list = tempo_list.tolist()
 
         tse_list = midi.time_signature_changes
-        full_note_tempo_list = (np.array([TRIO_MIDI_BAR_NUMBER * 60 * 4 / tempo for tempo in tempo_list])).tolist()
+        full_note_tempo_list = (np.array([60 * 4 / tempo for tempo in tempo_list])).tolist()
         # bar_tempo_list = (np.array(full_note_tempo_list) * np.array([tse.numerator/tse.denominator for tse in tse_list])).tolist()
         time_line = change_time_list
         time_line.append(length)
@@ -188,10 +188,12 @@ class DataPreparation(object):
         window_list = []
         for i in range(len(time_segment_list)):
             slice = full_note_tempo_list[i]
+            offset = time_segment_list[i][0]
             end = time_segment_list[i][-1]
             tempo = time_segment_list[i][-1] - time_segment_list[i][0]
-            window_list += [[start * slice, (start + 1) * slice] for start in range(int(tempo // slice))
-                            if (start + 1) * slice < end]
+            window_list += [[start * slice + offset, (start + 1) * slice * segment_length + offset] for start in
+                            range(int(tempo // slice))
+                            if (start + 1) * slice * segment_length + offset <= end]
 
         # windowing
         trio_midi_list = []
@@ -324,36 +326,39 @@ class DataPreparation(object):
         return note_list
 
 
-class DataAnalysis(object):
-    @staticmethod
-    def dataset_analysis(dataset_path, dataset_name, cutoff=0, shuffle=True):
-        """
-        return a beat tempo histogram of a dataset
-        :param dataset_path:
-        :param dataset_name: specified the dataset file prefix
-        :param cutoff: stop loading dataset when loaded more PrettyMIDI objects than this number
-        :param shuffle: shuffle the dataset if True
-        :return:
-        """
-        file_name_list = os.listdir(dataset_path)
-        count = 0
-        if shuffle:
-            random.shuffle(file_name_list)
+def cut_midi(file_path, img_num, length=16):
+    '''
+    return a list of note sequence of trio-midi of length, segments are cut from given midi file
+    :param file_path: target midi file's path and name
+    :param img_num:
+    :param length:
+    :return: a list of note sequence
+    '''
+    img_num *= 9
+    midi = pretty_midi.PrettyMIDI(file_path)
+    melodies = [instr.program for instr in midi.instruments
+                if instr.program in range(0, 31 + 1) and not instr.is_drum]  # need validate the numbers
+    bases = [instr.program for instr in midi.instruments
+             if instr.program in range(32, 39 + 1) and not instr.is_drum]
+    drums = [instr.program for instr in midi.instruments if instr.is_drum]
+    # get split PrettyMIDI objects
+    trio_dataset = []
+    if len(drums) > 0 and len(bases) > 0 and len(melodies) > 0:
+        # cross product
+        trio_structs = [[melody, base, drum] for melody in melodies for base in bases for drum in drums]
+        # window-split
+        for trio_struct in trio_structs:
+            try:
+                trio_dataset += DataPreparation.window_split_trio(midi, trio_struct, segment_length=16)
+            except BaseException as e:
+                print(e)
 
-        dataset = []
-        for file_name in file_name_list:
-            # restore dataset
-            if file_name.startswith(dataset_name)  and count <= cutoff:
-                print("loading {} into running memory...".format(file_name))
-                try:
-                    f = open(dataset_path + "/" + file_name, 'rb')
-                    dataset = pickle.load(f)
-                    f.close()
-                    count += len(dataset)
-                    print("loaded {} (#{}) into memory!".format(file_name, len(dataset)))
-                except BaseException as e:
-                    print(e)
-        if shuffle:
-            random.shuffle(dataset)
-        print("loaded all (#{}) midi files into memory!".format(count))
+    # select midi & return number control
+    if len(trio_dataset) >= img_num:
+        random.shuffle(trio_dataset)
+        selected_trio_list = trio_dataset[: img_num]
+        selected_trio_list
+        note_sequence_list = [midi2note_sequence(trio_segment) for trio_segment in selected_trio_list]
 
+    # return
+    return note_sequence_list
