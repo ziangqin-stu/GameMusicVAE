@@ -16,9 +16,10 @@ def spider_man_mdidi(reuse=False, file_path_name="", save_path="./data"):
         visited_url_list = []
         new_url_list.append(ROOT_URL)
         # dfs
+        print('\nSearching MIDI files from root URL({})...'.format(ROOT_URL))
         iter = 1
         while len(new_url_list) > 0:
-            print("iter:" + str(iter) + "  remain url number:" + str(len(new_url_list)) + ", source# = " + str(len(s_url_list)))
+            print("    iter no.: " + str(iter) + ' | ' + str(len(new_url_list)) + ' urls to explore | '+ str(len(s_url_list)) + ' midi-urls found')
             iter += 1
             url = new_url_list[0]
             new_url_list.remove(url)
@@ -31,6 +32,7 @@ def spider_man_mdidi(reuse=False, file_path_name="", save_path="./data"):
                     if (url.count("/") - ROOT_URL.count("/")) < CUTOFF:
                         cur_url_list = get_new_urls(url, next_layer=False)
                         new_url_list += [url for url in cur_url_list if url not in new_url_list]
+        print('    # searching finished!')
         # save
         save_list(s_url_list, save_path, "s_url_list.txt")
         save_midi(s_url_list, save_path)
@@ -53,9 +55,10 @@ def spider_man_vgmusic(reuse=False, file_path_name="", save_path="./data"):
         visited_url_list = []
         new_url_list.append(ROOT_URL)
         # dfs
+        print('\nSearching MIDI files from root URL({})...'.format(ROOT_URL))
         iter = 1
         while len(new_url_list) > 0:
-            print("iter:" + str(iter) + "  remain url number:" + str(len(new_url_list)) + ", source# = " + str(len(s_url_list)))
+            print("    iter no.: " + str(iter) + ' | ' + str(len(new_url_list)) + ' urls to explore | '+ str(len(s_url_list)) + ' midi-urls found')
             iter += 1
             url = new_url_list[0]
             new_url_list.remove(url)
@@ -68,6 +71,7 @@ def spider_man_vgmusic(reuse=False, file_path_name="", save_path="./data"):
                     if (url.count("/") - ROOT_URL.count("/")) < CUTOFF:
                         cur_url_list = get_new_urls_vgmusic(url)
                         new_url_list += [url for url in cur_url_list if url not in new_url_list]
+        print('    # searching finished!')
         # save
         save_list(s_url_list, save_path, "s_url_list.txt")
         save_midi(s_url_list, save_path)

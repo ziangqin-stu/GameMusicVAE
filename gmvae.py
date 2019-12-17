@@ -6,11 +6,11 @@ from lib.data import *
 
 def main():
     # check directory
-    upper_dir = os.path.abspath(os.path.dirname(os.getcwd()))
-    source_dir = upper_dir + 'source'
-    data_dir = source_dir + 'data'
-    database_dir = source_dir + 'database'
-    trio_midi_dir = source_dir + 'trio_midi'
+    curr_dir = os.getcwd()
+    source_dir = os.path.join(curr_dir, 'source')
+    data_dir = os.path.join(source_dir, 'data')
+    database_dir = os.path.join(source_dir, 'database')
+    trio_midi_dir = os.path.join(source_dir, 'trio_midi')
     if not os.path.exists(source_dir):
         os.makedirs(source_dir)
     if not os.path.exists(data_dir):
