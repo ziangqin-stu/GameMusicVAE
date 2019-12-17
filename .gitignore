@@ -5,3 +5,4 @@
 *.tar
 *.txt
 /__pycache__/*
+/source/model/train/*
