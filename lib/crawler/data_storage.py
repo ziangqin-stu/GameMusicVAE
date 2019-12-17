@@ -16,9 +16,9 @@ def save_midi(s_url_list, save_path):
         continue
 
 
-def save_list(list, save_path, save_name):
+def save_list(url_list, save_path, save_name):
     with open(os.path.join(save_path, save_name), 'w') as f:
-        for line in list:
+        for line in url_list:
             f.write(str(line) + '\n')
     print("saved list at " + os.path.join(save_path, save_name) + "!")
 

@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52777272-4086-4996-8237-c6293c60b506" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gmvae.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/crawler/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/crawler/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/crawler/data_storage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/crawler/html_parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/crawler/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/GameMusicVAE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GameMusicVAE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/ziang.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/ziang.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gmvae.py" beforeDir="false" afterPath="$PROJECT_DIR$/gmvae.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/crawler/data_storage.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/crawler/data_storage.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gmvae.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="609">
-              <caret line="42" column="26" lean-forward="true" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
+            <state relative-caret-position="524">
+              <caret line="38" column="49" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="49" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -56,8 +48,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/crawler/run.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+            <state relative-caret-position="279">
+              <caret line="55" selection-start-line="55" selection-end-line="55" />
+              <folding>
+                <element signature="e#1#29#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -65,7 +60,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/crawler/data_storage.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="210">
+              <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
               <folding>
                 <element signature="e#1#39#0" expanded="true" />
               </folding>
@@ -96,8 +92,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>try</find>
-      <find>creening &amp; splitting da</find>
       <find>return true</find>
       <find>loop_count = 0</find>
       <find>2</find>
@@ -126,6 +120,8 @@
       <find>file_path_name</find>
       <find>generate_trio_data</find>
       <find>path</find>
+      <find>run</find>
+      <find>iter</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -155,14 +151,14 @@
         <option value="$PROJECT_DIR$/lib/crawler/config.py" />
         <option value="$PROJECT_DIR$/lib/crawler/main.py" />
         <option value="$PROJECT_DIR$/lib/crawler/__init__.py" />
-        <option value="$PROJECT_DIR$/lib/crawler/data_storage.py" />
         <option value="$PROJECT_DIR$/lib/data.py" />
-        <option value="$PROJECT_DIR$/lib/crawler/run.py" />
+        <option value="$PROJECT_DIR$/lib/crawler/data_storage.py" />
         <option value="$PROJECT_DIR$/gmvae.py" />
+        <option value="$PROJECT_DIR$/lib/crawler/run.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-7" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
@@ -315,7 +311,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/crawler" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -337,7 +333,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.gmvae">
     <configuration name="data" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="GameMusicVAE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -380,6 +376,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="gmvae" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="GameMusicVAE" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gmvae.py" />
+      <option name="PARAMETERS" value="-p collect" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="GameMusicVAE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -401,8 +418,15 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.data" />
+      <item itemvalue="Python.debug" />
+      <item itemvalue="Python.gmvae" />
+      <item itemvalue="Python.main" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.gmvae" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.debug" />
         <item itemvalue="Python.data" />
@@ -441,7 +465,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.328" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.48487714" weight="0.32852387" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.24222222" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.38777778" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -467,16 +491,33 @@
           <line>7</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/gmvae.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="os.path.abspath(os.path.join(os.getcwd(), &quot;../..&quot;))" language="Python" />
+        <watch expression="os.path.exists(source_dir)" language="Python" />
+        <watch expression="source_dir" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>source_dir</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.exists(source_dir)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>os.path.abspath(os.path.join(os.getcwd(), &quot;../..&quot;))</expression-string>
         <language-id>Python</language-id>
@@ -514,16 +555,6 @@
       </expression>
       <expression>
         <expression-string>[[start * slice, (start + 1) * slice] for start in range(int(tempo // slice)) if (start + 1) * slice &lt; end]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>tempo // slice</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>empo // slice</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -815,22 +846,6 @@
     <entry file="file://$PROJECT_DIR$/lib/crawler/html_parser.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/crawler/data_storage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#1#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="8" column="22" selection-start-line="8" selection-end-line="8" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/attribute_vector_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -853,13 +868,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/crawler/run.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -867,10 +875,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/crawler/data_storage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
+          <folding>
+            <element signature="e#1#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="8" column="22" selection-start-line="8" selection-end-line="8" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/crawler/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+          <folding>
+            <element signature="e#1#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gmvae.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="42" column="26" lean-forward="true" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
+        <state relative-caret-position="524">
+          <caret line="38" column="49" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="49" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
