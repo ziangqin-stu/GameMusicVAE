@@ -1,16 +1,14 @@
 """
 Data preparation and storage services for GameMusicVAE
 """
-
 import pretty_midi
-# For plotting
 import os
 import pickle
 import numpy as np
 import math
-import random
 
 from lib.config import *
+
 
 class DataPreparation(object):
     """
@@ -18,10 +16,11 @@ class DataPreparation(object):
     """
     dataset = []
     trio_dataset = []
+
     def __init__(self):
         print("preparing data...")
         DataPreparation.dataset = DataPreparation.build_dataset(DATA_POOL_PATH, DATABASE_PATH)
-        DataPreparation.trio_dataset = DataPreparation.generate_trio_data(DATABASE_PATH, self.dataset)
+        DataPreparation.trio_dataset = DataPreparation.generate_trio_data(DATABASE_PATH)
         print("data prepared!")
 
     @classmethod
@@ -71,7 +70,8 @@ class DataPreparation(object):
                     file_path_name = save_path + "/dataset_part_{}_{}.txt".format(batch, i)
                     f = open(file_path_name, 'wb')
                     start = i * DATASET_PART_LENGTH
-                    end = (i + 1) * DATASET_PART_LENGTH if (i + 1) * DATASET_PART_LENGTH <= LOADING_BATCH_SIZE else LOADING_BATCH_SIZE
+                    end = (i + 1) * DATASET_PART_LENGTH \
+                        if (i + 1) * DATASET_PART_LENGTH <= LOADING_BATCH_SIZE else LOADING_BATCH_SIZE
                     pickle.dump(midi_file_list[start:end], f)
                     f.close()
                     print("saved dataset_part_{}_{}.txt at {}!".format(batch, i, save_path))
@@ -105,6 +105,7 @@ class DataPreparation(object):
         file_name_list = os.listdir(dataset_path)
         loop_count = 0
         trio_midi_count = 0
+        trio_dataset = []
         for file_name in file_name_list:
             # restore dataset
             dataset = []
@@ -141,7 +142,6 @@ class DataPreparation(object):
 
             # persisting trainable_dataset
             print("saving trio dataset from {}...".format(file_name))
-            saved_midi_count = 0
             if not os.path.exists(dataset_path):
                 os.makedirs(dataset_path)
             try:
@@ -166,42 +166,45 @@ class DataPreparation(object):
         return a list of window sized midi files that screened by notes' number
         :param midi: PrettyMIDI object to be split
         :param trio_struct: python list of length 3: [melody_instr_num, bass_instr_num, drum_instr_num]
+        :param segment_length: int, determines the length of trio music segment (measured in bars)
         :return: list of trio midi files split from midi controled by trio_struct
         """
         # data prepare
         length = midi.get_end_time()
         melody_instr = DataPreparation.get_instrument_by_program(midi, trio_struct[0])
-        bass_instr   = DataPreparation.get_instrument_by_program(midi, trio_struct[1])
-        drum_instr   = DataPreparation.get_instrument_by_program(midi, trio_struct[2])
+        bass_instr = DataPreparation.get_instrument_by_program(midi, trio_struct[1])
+        drum_instr = DataPreparation.get_instrument_by_program(midi, trio_struct[2])
 
         # build window list
         change_time_list, tempo_list = midi.get_tempo_changes()
         change_time_list = change_time_list.tolist()
         tempo_list = tempo_list.tolist()
 
-        tse_list = midi.time_signature_changes
+        # tse_list = midi.time_signature_changes
         full_note_tempo_list = (np.array([60 * 4 / tempo for tempo in tempo_list])).tolist()
-        # bar_tempo_list = (np.array(full_note_tempo_list) * np.array([tse.numerator/tse.denominator for tse in tse_list])).tolist()
+        # bar_tempo_list = \
+        #     (np.array(full_note_tempo_list) * np.array([tse.numerator/tse.denominator for tse in tse_list])).tolist()
         time_line = change_time_list
         time_line.append(length)
-        time_segment_list = [[time_line[i], time_line[i + 1]] for i in range(len(time_line)) if (i + 1) < len(time_line)]
+        time_segment_list = [[time_line[i], time_line[i + 1]]
+                             for i in range(len(time_line)) if (i + 1) < len(time_line)]
         window_list = []
         for i in range(len(time_segment_list)):
-            slice = full_note_tempo_list[i]
+            time_slice = full_note_tempo_list[i]
             offset = time_segment_list[i][0]
             end = time_segment_list[i][-1]
             tempo = time_segment_list[i][-1] - time_segment_list[i][0]
-            window_list += [[start * slice + offset, (start + 1) * slice * segment_length + offset] for start in
-                            range(int(tempo // slice))
-                            if (start + 1) * slice * segment_length + offset <= end]
+            window_list += [[start * time_slice + offset, (start + 1) * time_slice * segment_length + offset]
+                            for start in range(int(tempo // time_slice))
+                            if (start + 1) * time_slice * segment_length + offset <= end]
 
         # windowing
         trio_midi_list = []
-        for window in window_list: # time consuming method!!
-            tempo = window[-1] - window[0]
+        for window in window_list:  # time consuming method!!
+            # tempo = window[-1] - window[0]
             melody_note_list = DataPreparation.find_notes_in_window(window, melody_instr.notes)
-            bass_note_list   = DataPreparation.find_notes_in_window(window, bass_instr.notes)
-            drum_note_list   = DataPreparation.find_notes_in_window(window, drum_instr.notes)
+            bass_note_list = DataPreparation.find_notes_in_window(window, bass_instr.notes)
+            drum_note_list = DataPreparation.find_notes_in_window(window, drum_instr.notes)
             if len(melody_note_list) >= MIN_MELODY_NOTES_IN_SEGMENT \
                     and len(bass_note_list) >= MIN_BASS_NOTES_IN_SEGMENT \
                     and len(drum_note_list) >= MIN_DRUM_NOTES_IN_SEGMENT \
@@ -209,11 +212,11 @@ class DataPreparation(object):
                     and DataPreparation.trio_continuous(window, melody_note_list, bass_note_list, drum_note_list):
                 trio_midi = pretty_midi.PrettyMIDI()
                 trio_melody = pretty_midi.Instrument(melody_instr.program, is_drum=False)
-                trio_bass   = pretty_midi.Instrument(bass_instr.program, is_drum=False)
-                trio_drum   = pretty_midi.Instrument(drum_instr.program, is_drum=True)
+                trio_bass = pretty_midi.Instrument(bass_instr.program, is_drum=False)
+                trio_drum = pretty_midi.Instrument(drum_instr.program, is_drum=True)
                 trio_melody.notes = melody_note_list
-                trio_bass.notes   = bass_note_list
-                trio_drum.notes   = drum_note_list
+                trio_bass.notes = bass_note_list
+                trio_drum.notes = drum_note_list
                 trio_midi.instruments = [trio_melody, trio_bass, trio_drum]
                 trio_midi_list.append(trio_midi)
         # return
@@ -221,9 +224,11 @@ class DataPreparation(object):
 
     @classmethod
     def build_note_sequence_dataset(cls):
-        # convert_dir_to_note_sequences --input_dir=.\midi --output_file=./note_sequence/notesequences.tfrecord --recursive
+        # convert_dir_to_note_sequences
+        # --input_dir=./midi --output_file=./note_sequence/notesequences.tfrecord --recursive
         print("building note-sequence dataset with magenta...")
-        info = os.popen('convert_dir_to_note_sequences --input_dir=.\midi --output_file=./note_sequence/notesequences.tfrecord --recursive')
+        info = os.popen('convert_dir_to_note_sequences ' +
+                        '--input_dir=./midi --output_file=./note_sequence/notesequences.tfrecord --recursive')
         print("system info: {}".format(info))
 
     @staticmethod
@@ -257,10 +262,8 @@ class DataPreparation(object):
         :param dataset_path:
         :param dataset_name:
         :param midi_folder_path:
-        :param alive_dataset:
-        :return:
+        :return: None
         """
-
         dataset = []
         file_name_list = os.listdir(dataset_path)
         midi_count = 0
@@ -281,7 +284,7 @@ class DataPreparation(object):
 
                 # generate & save midi files
                 print("saving {} to midi files...".format(file_name))
-                count = 0;
+                count = 0
                 for midi in dataset:
                     try:
                         count += 1
@@ -293,8 +296,6 @@ class DataPreparation(object):
                 midi_count += count
                 print("saved all midi files (#{}) in {}!".format(count, file_name))
         print("saved all midi objects (#{}) to {}!".format(midi_count, dataset_path))
-
-
 
     @staticmethod
     def get_instrument_by_program(midi, program):
@@ -319,46 +320,46 @@ class DataPreparation(object):
         """
         note_list = []
         start = window[0]
-        end   = window[-1]
+        end = window[-1]
         for note in instr_note_list:
             if start <= note.start < end and note.end <= end:
                 note_list.append(note)
         return note_list
 
 
-def cut_midi(file_path, img_num, length=16):
-    '''
-    return a list of note sequence of trio-midi of length, segments are cut from given midi file
-    :param file_path: target midi file's path and name
-    :param img_num:
-    :param length:
-    :return: a list of note sequence
-    '''
-    img_num *= 9
-    midi = pretty_midi.PrettyMIDI(file_path)
-    melodies = [instr.program for instr in midi.instruments
-                if instr.program in range(0, 31 + 1) and not instr.is_drum]  # need validate the numbers
-    bases = [instr.program for instr in midi.instruments
-             if instr.program in range(32, 39 + 1) and not instr.is_drum]
-    drums = [instr.program for instr in midi.instruments if instr.is_drum]
-    # get split PrettyMIDI objects
-    trio_dataset = []
-    if len(drums) > 0 and len(bases) > 0 and len(melodies) > 0:
-        # cross product
-        trio_structs = [[melody, base, drum] for melody in melodies for base in bases for drum in drums]
-        # window-split
-        for trio_struct in trio_structs:
-            try:
-                trio_dataset += DataPreparation.window_split_trio(midi, trio_struct, segment_length=16)
-            except BaseException as e:
-                print(e)
-
-    # select midi & return number control
-    if len(trio_dataset) >= img_num:
-        random.shuffle(trio_dataset)
-        selected_trio_list = trio_dataset[: img_num]
-        selected_trio_list
-        note_sequence_list = [midi2note_sequence(trio_segment) for trio_segment in selected_trio_list]
-
-    # return
-    return note_sequence_list
+# def cut_midi(file_path, img_num, length=16):
+#     '''
+#     return a list of note sequence of trio-midi of length, segments are cut from given midi file
+#     :param file_path: target midi file's path and name
+#     :param img_num:
+#     :param length:
+#     :return: a list of note sequence
+#     '''
+#     img_num *= 9
+#     midi = pretty_midi.PrettyMIDI(file_path)
+#     melodies = [instr.program for instr in midi.instruments
+#                 if instr.program in range(0, 31 + 1) and not instr.is_drum]  # need validate the numbers
+#     bases = [instr.program for instr in midi.instruments
+#              if instr.program in range(32, 39 + 1) and not instr.is_drum]
+#     drums = [instr.program for instr in midi.instruments if instr.is_drum]
+#     # get split PrettyMIDI objects
+#     trio_dataset = []
+#     if len(drums) > 0 and len(bases) > 0 and len(melodies) > 0:
+#         # cross product
+#         trio_structs = [[melody, base, drum] for melody in melodies for base in bases for drum in drums]
+#         # window-split
+#         for trio_struct in trio_structs:
+#             try:
+#                 trio_dataset += DataPreparation.window_split_trio(midi, trio_struct, segment_length=16)
+#             except BaseException as e:
+#                 print(e)
+#
+#     # select midi & return number control
+#     if len(trio_dataset) >= img_num:
+#         random.shuffle(trio_dataset)
+#         selected_trio_list = trio_dataset[: img_num]
+#         selected_trio_list
+#         note_sequence_list = [midi2note_sequence(trio_segment) for trio_segment in selected_trio_list]
+#
+#     # return
+#     return note_sequence_list

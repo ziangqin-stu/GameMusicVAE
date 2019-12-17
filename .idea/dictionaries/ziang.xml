@@ -2,7 +2,10 @@
   <dictionary name="ziang">
     <words>
       <w>dataset</w>
+      <w>notesequences</w>
       <w>struct</w>
+      <w>tfrecord</w>
+      <w>vgmusic</w>
     </words>
   </dictionary>
 </component>
