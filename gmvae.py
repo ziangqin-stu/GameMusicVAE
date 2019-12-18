@@ -6,8 +6,8 @@ from lib.data import *
 
 def main():
     # check directory
-    upper_dir = os.path.abspath(os.path.dirname(os.getcwd()))
-    source_dir = os.path.join(upper_dir, 'source')
+    curr_dir = os.getcwd()
+    source_dir = os.path.join(curr_dir, 'source')
     data_dir = os.path.join(source_dir, 'data')
     database_dir = os.path.join(source_dir, 'database')
     trio_midi_dir = os.path.join(source_dir, 'trio_midi')
