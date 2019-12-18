@@ -1,3 +1,4 @@
+
 """
 Data preparation and storage services for GameMusicVAE
 """
@@ -34,6 +35,7 @@ class DataPreparation(object):
         :param cutoff: limit of read-in midi file number
         :return: dataset(list of PrettyMIDI object) for GameMusicVAE
         """
+        print('\n\n> Building Dataset <')
         # load midi files as PrettyMIDI
         midi_file_list = []
         file_name_list = os.listdir(data_pool_path)
@@ -106,18 +108,21 @@ class DataPreparation(object):
         loop_count = 0
         trio_midi_count = 0
         trio_dataset = []
+
+        print('\n\n> Building Trio Dataset <')
         for file_name in file_name_list:
             # restore dataset
             dataset = []
-            if file_name.startswith(DATASET_NAME):
-                print("\nLoading {} into running memory...".format(file_name))
-                try:
-                    f = open(dataset_path + "/" + file_name, 'rb')
-                    dataset = pickle.load(f)
-                    f.close()
-                    print("    # loaded {} (#{}) into running memory!".format(file_name, len(dataset)))
-                except BaseException as e:
-                    print('    except: ' + e)
+            if not file_name.startswith(DATASET_NAME):
+                continue
+            print("\nLoading {} into running memory...".format(file_name))
+            try:
+                f = open(dataset_path + "/" + file_name, 'rb')
+                dataset = pickle.load(f)
+                f.close()
+                print("    # loaded {} (#{}) into running memory!".format(file_name, len(dataset)))
+            except BaseException as e:
+                print('    except: ' + e)
 
             # screen and split data for trio dataset
             print("Screening & splitting dataset...")
@@ -141,7 +146,7 @@ class DataPreparation(object):
             print("    # created {} trio midis!".format(len(trio_dataset)))
 
             # persisting trainable_dataset
-            print("\nSaving trio dataset from {}...".format(file_name))
+            print("Saving trio dataset from {}...".format(file_name))
             if not os.path.exists(dataset_path):
                 os.makedirs(dataset_path)
             try:
@@ -149,7 +154,7 @@ class DataPreparation(object):
                 f = open(file_path_name, 'wb')
                 pickle.dump(trio_dataset, f)
                 f.close()
-                print("    saved trio_dataset_part_{}.txt at {}!".format(loop_count, dataset_path))
+                print("    # saved trio_dataset_part_{}.txt at {}!".format(loop_count, dataset_path))
             except BaseException as e:
                 print('    except: ' + e)
 
@@ -194,9 +199,9 @@ class DataPreparation(object):
             offset = time_segment_list[i][0]
             end = time_segment_list[i][-1]
             tempo = time_segment_list[i][-1] - time_segment_list[i][0]
-            window_list += [[start * time_slice + offset, (start + 1) * time_slice * segment_length + offset]
+            window_list += [[start * time_slice + offset, (start + segment_length) * time_slice + offset]
                             for start in range(int(tempo // time_slice))
-                            if (start + 1) * time_slice * segment_length + offset <= end]
+                            if (start + segment_length) * time_slice + offset <= end]
 
         # windowing
         trio_midi_list = []
@@ -226,7 +231,7 @@ class DataPreparation(object):
     def build_note_sequence_dataset(cls):
         # convert_dir_to_note_sequences
         # --input_dir=./midi --output_file=./note_sequence/notesequences.tfrecord --recursive
-        print("\nBuilding note-sequence dataset with magenta...")
+        print("\n\n > Building Note-sequence Dataset (using magenta) <")
         info = os.popen('convert_dir_to_note_sequences ' +
                         '--input_dir=./midi --output_file=./note_sequence/notesequences.tfrecord --recursive')
         print("    # system info: {}".format(info))
@@ -267,7 +272,7 @@ class DataPreparation(object):
         dataset = []
         file_name_list = os.listdir(dataset_path)
         midi_count = 0
-        print("\n> Saving midi object to .mid files...")
+        print("\n\n> Saving MIDI Files <")
         if not os.path.exists(dataset_path):
             os.makedirs(dataset_path)
         for file_name in file_name_list:
@@ -289,7 +294,7 @@ class DataPreparation(object):
                     try:
                         count += 1
                         midi.write(midi_folder_path + "/" + str(count + midi_count) + ".mid")
-                        if (count + midi_count) % 100 == 0:
+                        if (count + midi_count) % 500 == 0:
                             print("    saved {} midi objects".format(count + midi_count))
                     except BaseException as e:
                         print('    except: ' + e)
