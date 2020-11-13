@@ -48,4 +48,4 @@ wcwidth==0.1.7
 webencodings==0.5.1
 widgetsnbextension==3.5.1
 sklearn
-tensorflow==1.14
+tensorflow==2.3.1
